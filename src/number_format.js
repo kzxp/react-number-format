@@ -7,11 +7,6 @@ function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
-function removeLeadingZero(numStr) {
-  //remove leading zeros
-  return numStr.replace(/^0+/,'') || '0';
-}
-
 /**
  * limit decimal numbers to given precision
  * Not used .fixedTo because that will break with big numbers
@@ -345,9 +340,6 @@ class NumberFormat extends React.Component {
       const parts = formattedValue.split(decimalSeparator);
       let beforeDecimal = parts[0];
       let afterDecimal = parts[1] || '';
-
-      //remove leading zeros from number before decimal
-      beforeDecimal = removeLeadingZero(beforeDecimal);
 
       //apply decimal precision if its defined
       if (decimalPrecision !== undefined) afterDecimal = limitToPrecision(afterDecimal, decimalPrecision);
