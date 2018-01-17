@@ -85,7 +85,7 @@ const defaultProps = {
   onKeyDown: noop,
   onMouseUp: noop,
   isAllowed: function () { return true; },
-  isLeadingZero: function (value) { (""+value).length === 1 && value === 0 }
+  isLeadingZero: function (value) { return (""+value).length === 1 && value === 0 }
 };
 
 class NumberFormat extends React.Component {
@@ -442,7 +442,7 @@ class NumberFormat extends React.Component {
   onBlur(e) {
     
     const { isLeadingZero, value } = this.props;
-    if (isLeadingZero(getFloatValue(this.state.value))) {
+    if (isLeadingZero(this.getFloatValue(this.state.value))) {
       
       const el = e.target;
       const inputValue = el.value;
