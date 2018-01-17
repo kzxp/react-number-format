@@ -399,7 +399,7 @@ class NumberFormat extends React.Component {
     const el = e.target;
     const inputValue = el.value;
     const { state, props } = this;
-    const { isAllowed, isNoLeadingZero } = props;
+    const { isAllowed, isLeadingZero } = props;
     const lastValue = state.value;
     let { formattedValue, value } = this.formatInput(inputValue); // eslint-disable-line prefer-const
 
@@ -439,7 +439,7 @@ class NumberFormat extends React.Component {
 
   onBlur(e) {
     
-    const { isNoLeadingZero, value } = this.props;
+    const { isLeadingZero, value } = this.props;
     if (isLeadingZero(getFloatValue(this.state.value))) {
       
       const el = e.target;
