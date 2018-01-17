@@ -70,7 +70,8 @@ const propTypes = {
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   type: PropTypes.oneOf(['text', 'tel']),
-  isAllowed: PropTypes.func
+  isAllowed: PropTypes.func,
+  isLeadingZero: PropTypes.func
 };
 
 const defaultProps = {
@@ -84,7 +85,7 @@ const defaultProps = {
   onKeyDown: noop,
   onMouseUp: noop,
   isAllowed: function () { return true; },
-  isLeadingZero: function (value) { value.length === 1 && value === 0 }
+  isLeadingZero: function (value) { (""+value).length === 1 && value === 0 }
 };
 
 class NumberFormat extends React.Component {
@@ -97,6 +98,7 @@ class NumberFormat extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.onBlur = this.onBlur.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
