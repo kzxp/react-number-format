@@ -445,17 +445,23 @@ class NumberFormat extends React.Component {
   }
 
   onBlur(e) {
-    const { value: oldValue } = this.props;
-  
-    if(oldValue != null) {
-      if (isLeadingZero(this.state.value)) {
-        const el = e.target;
-        const inputValue = el.value;
-        
-        const { formattedValue, value } = this.formatInput(oldValue);
-        el.value = formattedValue;
-        this.setState({ value: formattedValue })
-      }
+    e.persist();
+    const { onChange } = this.props;
+    if (isLeadingZero(this.removePrefixAndSuffix(this.state.value, this.props))) {
+    
+      const el = e.target;
+      const { formattedValue, value } = this.formatInput(0);
+
+      const valueObj = {
+        formattedValue,
+        value,
+        floatValue: this.getFloatValue(value)
+      };
+
+      el.value = formattedValue;
+      this.setState({ value: formattedValue }, () => {
+        onChange(e, valueObj);
+      })
     }
   }
 
