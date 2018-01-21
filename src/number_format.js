@@ -446,14 +446,15 @@ class NumberFormat extends React.Component {
 
   onBlur(e) {
     const { value: oldValue } = this.props;
-    let { formattedValue, value } = this.formatInput(this.state.value);
+  
     if(oldValue != null) {
-      if (isLeadingZero(value)) {
+      if (isLeadingZero(this.state.value)) {
         const el = e.target;
         const inputValue = el.value;
-  
+        
+        const { formattedValue, value } = this.formatInput(oldValue);
         el.value = formattedValue;
-        this.setState({ value: oldValue })
+        this.setState({ value: formattedValue })
       }
     }
   }
