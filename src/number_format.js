@@ -7,6 +7,11 @@ function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
+function isLeadingZero(numStr) {
+  //check leading zeros
+  return /^0+/.test(numStr)
+}
+
 /**
  * limit decimal numbers to given precision
  * Not used .fixedTo because that will break with big numbers
@@ -84,8 +89,7 @@ const defaultProps = {
   onChange: noop,
   onKeyDown: noop,
   onMouseUp: noop,
-  isAllowed: function () { return true; },
-  isLeadingZero: function (value) { return (""+value).length === 1 && value === 0 }
+  isAllowed: function () { return true; }
 };
 
 class NumberFormat extends React.Component {
@@ -359,6 +363,7 @@ class NumberFormat extends React.Component {
       if (hasNegative && !removeNegative) beforeDecimal = '-' + beforeDecimal;
 
       formattedValue = beforeDecimal + (hasDecimalSeparator && decimalSeparator || '') + afterDecimal;
+
     }
 
     return {
@@ -401,7 +406,7 @@ class NumberFormat extends React.Component {
     const el = e.target;
     const inputValue = el.value;
     const { state, props } = this;
-    const { isAllowed, isLeadingZero } = props;
+    const { isAllowed } = props;
     const lastValue = state.value;
     let { formattedValue, value } = this.formatInput(inputValue); // eslint-disable-line prefer-const
 
@@ -430,7 +435,7 @@ class NumberFormat extends React.Component {
     //change the state
     if (formattedValue !== lastValue) {
       this.setState({ value: formattedValue }, () => {
-        if (!isLeadingZero(valueObj.floatValue)) {
+        if (!isLeadingZero(value)) {
           props.onChange(e, valueObj);
         }
       });
@@ -440,15 +445,16 @@ class NumberFormat extends React.Component {
   }
 
   onBlur(e) {
-    
-    const { isLeadingZero, value } = this.props;
-    if (isLeadingZero(this.getFloatValue(this.state.value))) {
-      
-      const el = e.target;
-      const inputValue = el.value;
-      el.value = this.props.value;
-
-      this.setState({ value: this.props.value })
+    const { value: oldValue } = this.props;
+    let { formattedValue, value } = this.formatInput(this.state.value);
+    if(oldValue != null) {
+      if (isLeadingZero(value)) {
+        const el = e.target;
+        const inputValue = el.value;
+  
+        el.value = formattedValue;
+        this.setState({ value: oldValue })
+      }
     }
   }
 
